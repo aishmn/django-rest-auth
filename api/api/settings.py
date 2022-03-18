@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'account'
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -88,9 +90,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'account.authenticate.CustomAuthentication',
     )
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -122,6 +130,20 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+
+    # custom
+    # Cookie name. Enables cookies if value is set.
+    'AUTH_COOKIE': 'access_token',
+    # A string like "example.com", or None for standard domain cookie.
+    'AUTH_COOKIE_DOMAIN': None,
+    # Whether the auth cookies should be secure (https:// only).
+    'AUTH_COOKIE_SECURE': False,
+    # Http only cookie flag.It's not fetch by javascript.
+    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
+    # Whether to set the flag restricting cookie leaks on cross-site requests. This can be 'Lax', 'Strict', or None to disable the flag.
+    'AUTH_COOKIE_SAMESITE': 'Lax',
+
 }
 
 
